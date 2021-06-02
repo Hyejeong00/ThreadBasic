@@ -1,16 +1,15 @@
 package com.example.threadbasic;
 
-import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
+    Thread wr;
     WorkerThread wt;
     boolean running = true;
-
+    String TAG2 = "THREAD2";
     String TAG = "Thread";
 
     class WorkerThread extends Thread {
@@ -25,38 +24,53 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.v(TAG, "Now I am in onCreate");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        wt = new WorkerThread();
         running = true;
+        wt = new WorkerThread();
+        wr=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i=0;
+                for(i=0;i<20&&running;i++){
+                    try {
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){
+                    }
+                    Log.v("THREAD", "Runnable time" + i);
+                }
+            }
+        });
         wt.start();
-        Log.v(TAG, "Now I am in onStart");
+        wr.start();
+        Log.v(TAG2, "Now I am in onStart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         running = false;
-        Log.v(TAG, "Now I am in onStop");
+
+        Log.v(TAG2, "Now I am in onStop");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v(TAG, "Now I am in onPause");
+        Log.v(TAG2, "Now I am in onPause");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(TAG, "Now I am in onResume");
+        Log.v(TAG2, "Now I am in onResume");
     }
 }
