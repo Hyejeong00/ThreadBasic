@@ -26,10 +26,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class WorkerRunnable implements Runnable {
-        WorkerRunnable() {
-
-        }
         public void run() {
+            running = true;
             int i=0;
             for(i=0;i<20&&running;i++){
                 try {
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running = true;
-        wr = new WorkerThread();
+        wr = new Thread(new WorkerRunnable());
         wr.run();
         /*wt = new WorkerThread();
         wr=new Thread(new Runnable() {
